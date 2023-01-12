@@ -1,3 +1,3 @@
 # KotlinUnitConverter
- Building a unit converter but in Kotlin instead of Java
+ Building a unit converter in Kotlin instead of Java
 
