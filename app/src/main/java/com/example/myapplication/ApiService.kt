@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ApiService {
-    @GET("latest")
-    fun getCurrency(@Query("base") base: String): Call<CurrencyResponse>
+interface CurrencyAPI {
+    @GET("v2/currency/list")
+    fun getCurrency(@Query("api_key") apiKey: String): Call<CurrencyResponse>
 }

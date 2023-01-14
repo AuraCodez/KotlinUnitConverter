@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.exchangeratesapi.io/")
+            .baseUrl("https://api.exchangeratesapi.io/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
