@@ -6,5 +6,7 @@ import retrofit2.http.Query
 
 interface CurrencyAPI {
     @GET("v2/currency/list")
-    fun getCurrency(@Query("api_key") apiKey: String): Call<CurrencyResponse>
+    fun getCurrency(@Query("apiKey") apiKey: String): Call<CurrencyResponse>
+
 }
+

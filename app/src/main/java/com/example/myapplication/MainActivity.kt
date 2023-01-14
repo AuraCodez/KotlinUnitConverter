@@ -14,5 +14,15 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+
+        //To read the API key from the assets folder
+        val inputStream = assets.open("apiKey.txt")
+        val apiKey = inputStream.bufferedReader().use {
+            it.readText()
+        }
+
+        val api = retrofit.create(CurrencyAPI::class.java)
+
+
     }
 }
