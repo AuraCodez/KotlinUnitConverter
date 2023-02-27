@@ -10,8 +10,11 @@
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2085" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/drawable/unitround.xml" value="0.198" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/font/.xml" value="0.28020833333333334" />
-        <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/activity_converter.xml" value="0.17083333333333334" />
+        <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/activity_unit_converter.xml" value="0.17083333333333334" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/currency_page.xml" value="0.264" />
+        <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/morsecode_page.xml" value="0.264" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/layout/unitconverter_page.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.138" />
         <entry key="..\:/Users/dankm/OneDrive/Documents/GitHub/KotlinUnitConverter/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.138" />
