@@ -33,5 +33,3 @@ License
 This project is licensed under the MIT License - see the LICENSE.md file for details
 
 Your feedback, bug reports, and pull requests are welcome. Feel free to open an issue to discuss any improvements or enhancements you'd like to see in this project.
-
-Thank you for checking out my project. Enjoy exploring the app!
