@@ -11,7 +11,12 @@ interface ApiService {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("amount") amount: Double
-    ) : Response<ApiResponse> // -? return data class
+    ) : Response<ApiResponse> //  return data class
+
+    @GET("v1/symbols")
+    suspend fun getCurrencySymbols(
+        @Query("access_key") access_key: String,
+    ) : Response<SymbolResponse>
 
 }
 
