@@ -1,11 +1,8 @@
+package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.Converter
-import com.example.myapplication.MorseCodeConverter
-import com.example.myapplication.R
-import com.example.myapplication.UnitConverter
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,6 +12,12 @@ class MainActivity : AppCompatActivity() {
         val currencyBtn = findViewById<Button>(R.id.currencyButton)
         currencyBtn.setOnClickListener {
             val intent = Intent(this, Converter::class.java)
+            val inputStream = assets.open("apiKey.txt")
+            val apiKey = inputStream.bufferedReader().use {
+                it.readText()
+            }
+
+            intent.putExtra("API_KEY", apiKey)
             startActivity(intent)
         }
 
@@ -30,11 +33,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val inputStream = assets.open("apiKey.txt")
-        val apiKey = inputStream.bufferedReader().use {
-            it.readText()
-        }
-
-        // The api instance could be used here to call the API methods
     }
-}
+ }

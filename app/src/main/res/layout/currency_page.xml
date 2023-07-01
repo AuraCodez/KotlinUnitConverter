@@ -18,7 +18,7 @@
 
 
         <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner2"
+            android:id="@+id/toSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
             app:layout_constraintVertical_bias="0.025" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner"
+            android:id="@+id/fromSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
@@ -62,7 +62,7 @@
             android:layout_marginTop="92dp"
             android:text="From"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/spinner"
+            app:layout_constraintBottom_toTopOf="@+id/fromSpinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.107"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,11 +76,11 @@
             android:layout_marginTop="36dp"
             android:text="To"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/spinner2"
+            app:layout_constraintBottom_toTopOf="@+id/toSpinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.136"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:layout_constraintTop_toBottomOf="@+id/fromSpinner"
             app:layout_constraintVertical_bias="0.0" />
 
 
@@ -100,7 +100,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.571"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner2"
+            app:layout_constraintTop_toBottomOf="@+id/toSpinner"
             tools:ignore="LabelFor" />
 
         <androidx.appcompat.widget.AppCompatButton
