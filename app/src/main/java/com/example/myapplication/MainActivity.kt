@@ -12,9 +12,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val inputStream = assets.open("apiKey.txt")
+        val apiKey = inputStream.bufferedReader().use {
+            it.readText()
+        }
+
         val currencyBtn = findViewById<Button>(R.id.currencyButton)
         currencyBtn.setOnClickListener {
             val intent = Intent(this, Converter::class.java)
+            intent.putExtra("API_KEY", apiKey)
             startActivity(intent)
         }
 
@@ -30,10 +36,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val inputStream = assets.open("apiKey.txt")
-        val apiKey = inputStream.bufferedReader().use {
-            it.readText()
-        }
+
 
         // The api instance could be used here to call the API methods
     }
