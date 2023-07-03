@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jaredrummler.materialspinner.MaterialSpinner
 import com.jaredrummler.materialspinner.MaterialSpinnerAdapter
@@ -19,6 +20,7 @@ class Converter : AppCompatActivity() {
     private lateinit var amountEditText: EditText
     private lateinit var convertButton: Button
     private lateinit var resultEditText: EditText
+    private val countriesMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.currency_page)
@@ -31,7 +33,12 @@ class Converter : AppCompatActivity() {
         val apiKey = intent.getStringExtra("API_KEY") ?: ""
 
         convertButton.setOnClickListener {
-            convertCurrency(apiKey, fromSpinner.text.toString().trim(), toSpinner.text.toString().trim(), amountEditText.text.toString().trim().toDouble())
+            if (amountEditText.text.toString() == "" || !(isNumeric(amountEditText.text.toString()))) {
+                val context = applicationContext
+                Toast.makeText(context, "Please enter in a valid amount", Toast.LENGTH_SHORT).show()
+            } else {
+                convertCurrency(apiKey, fromSpinner.text.toString().trim(), toSpinner.text.toString().trim(), amountEditText.text.toString().trim().toDouble())
+            }
         }
 
         Log.d("ConverterActivity", "API key: $apiKey")
@@ -57,10 +64,12 @@ class Converter : AppCompatActivity() {
                 val response = api.getCurrencySymbols(apiKey)
                 if (response.isSuccessful) {
                     response.body()?. let {data ->
-                        val symbols = data.symbols.values.toList()
-                        Log.d("ConverterActivity", "Symbols $symbols")
-                        populateSpinners(symbols, toSpinner)
-                        populateSpinners(symbols, fromSpinner)
+                        countriesMap.putAll(data.symbols) // We get the HashMap from data.symbols and transfer all the data into the new HashMap
+                        Log.d("countries", countriesMap.toString())
+                        val worldCurrencies = data.symbols.values.toList()
+                        val sortedWorldNames = worldCurrencies.sortedWith(compareBy {it})
+                        populateSpinners(sortedWorldNames, toSpinner)
+                        populateSpinners(sortedWorldNames, fromSpinner)
                     }
                 }
             } catch(e: Exception) {
@@ -86,5 +95,9 @@ class Converter : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun isNumeric(input: String): Boolean {
+        return input.toDoubleOrNull() != null
     }
 }
