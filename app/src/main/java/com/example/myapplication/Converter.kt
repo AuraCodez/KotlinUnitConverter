@@ -21,6 +21,7 @@ class Converter : AppCompatActivity() {
     private lateinit var convertButton: Button
     private lateinit var resultEditText: EditText
     private val countriesMap = HashMap<String, String>()
+    private val reverseCountriesMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.currency_page)
@@ -32,12 +33,15 @@ class Converter : AppCompatActivity() {
         resultEditText = findViewById(R.id.convertedAmount)
         val apiKey = intent.getStringExtra("API_KEY") ?: ""
 
+
         convertButton.setOnClickListener {
             if (amountEditText.text.toString() == "" || !(isNumeric(amountEditText.text.toString()))) {
                 val context = applicationContext
                 Toast.makeText(context, "Please enter in a valid amount", Toast.LENGTH_SHORT).show()
             } else {
-                convertCurrency(apiKey, fromSpinner.text.toString().trim(), toSpinner.text.toString().trim(), amountEditText.text.toString().trim().toDouble())
+                convertCurrency(
+                    apiKey, reverseCountriesMap[fromSpinner.text.toString().trim()]?: "", reverseCountriesMap[toSpinner.text.toString().trim()]?: "",
+                    amountEditText.text.toString().trim().toDouble())
             }
         }
 
@@ -65,9 +69,10 @@ class Converter : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?. let {data ->
                         countriesMap.putAll(data.symbols) // We get the HashMap from data.symbols and transfer all the data into the new HashMap
-                        Log.d("countries", countriesMap.toString())
                         val worldCurrencies = data.symbols.values.toList()
                         val sortedWorldNames = worldCurrencies.sortedWith(compareBy {it})
+                        reverseCountriesMap.putAll(reverseMap(countriesMap))
+                        Log.d("countries", reverseCountriesMap.toString())
                         populateSpinners(sortedWorldNames, toSpinner)
                         populateSpinners(sortedWorldNames, fromSpinner)
                     }
@@ -100,4 +105,10 @@ class Converter : AppCompatActivity() {
     private fun isNumeric(input: String): Boolean {
         return input.toDoubleOrNull() != null
     }
+
+    private fun reverseMap(countriesMap: HashMap<String, String>): HashMap<String, String> {
+        return countriesMap.entries.associate { (k, v) -> v to k }.toMutableMap() as HashMap<String, String>
+    }
+
+
 }
