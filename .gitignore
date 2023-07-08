@@ -15,3 +15,4 @@
 local.properties
 assets
 app\src\main\assets\apiKey.txt
+app\src\main\assets\apiNinjasKey.txt

@@ -14,12 +14,15 @@ import kotlinx.coroutines.launch
 
 class Converter : AppCompatActivity() {
 
-    private val api: ApiService = RetrofitClient.api
+    private val apiExchangeRates: ApiService = RetrofitClient.apiExchangeRates
+    private val apiCurrencyConverter: ApiService = RetrofitClient.apiNinjasConvert
+
     private lateinit var fromSpinner: MaterialSpinner
     private lateinit var toSpinner: MaterialSpinner
     private lateinit var amountEditText: EditText
     private lateinit var convertButton: Button
     private lateinit var resultEditText: EditText
+
     private val countriesMap = HashMap<String, String>()
     private val reverseCountriesMap = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +42,13 @@ class Converter : AppCompatActivity() {
                 val context = applicationContext
                 Toast.makeText(context, "Please enter in a valid amount", Toast.LENGTH_SHORT).show()
             } else {
+                val fromCountryCode = fromSpinner.text.toString().trim()
+                val toCountryCode = toSpinner.text.toString().trim()
                 convertCurrency(
-                    apiKey, reverseCountriesMap[fromSpinner.text.toString().trim()]?: "", reverseCountriesMap[toSpinner.text.toString().trim()]?: "",
+                    apiKey, reverseCountriesMap[fromCountryCode]?: "", reverseCountriesMap[toCountryCode]?: "",
                     amountEditText.text.toString().trim().toDouble())
             }
         }
-
-        Log.d("ConverterActivity", "API key: $apiKey")
         fetchCurrencySymbols(apiKey)
     }
 
@@ -65,14 +68,13 @@ class Converter : AppCompatActivity() {
     private fun fetchCurrencySymbols(apiKey: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = api.getCurrencySymbols(apiKey)
+                val response = apiExchangeRates.getCurrencySymbols(apiKey)
                 if (response.isSuccessful) {
                     response.body()?. let {data ->
                         countriesMap.putAll(data.symbols) // We get the HashMap from data.symbols and transfer all the data into the new HashMap
                         val worldCurrencies = data.symbols.values.toList()
                         val sortedWorldNames = worldCurrencies.sortedWith(compareBy {it})
                         reverseCountriesMap.putAll(reverseMap(countriesMap))
-                        Log.d("countries", reverseCountriesMap.toString())
                         populateSpinners(sortedWorldNames, toSpinner)
                         populateSpinners(sortedWorldNames, fromSpinner)
                     }
@@ -84,16 +86,14 @@ class Converter : AppCompatActivity() {
         }
     }
 
-    private fun convertCurrency(apiKey: String, from: String, to: String, amount: Double) {
+    private fun convertCurrency(apiKey: String, have: String, want: String, amount: Double) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = api.getConvertCurrency(apiKey, from, to, amount)
+                val response = apiCurrencyConverter.getConvertCurrency(apiKey, have, want, amount)
                 if (response.isSuccessful) {
                     response.body(). let {data ->
-                        resultEditText.setText(data.toString())
-                        Log.d("Amount", "amount $data.toString()")
+                        resultEditText.setText(data?.new_amount.toString())
                     }
-
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
