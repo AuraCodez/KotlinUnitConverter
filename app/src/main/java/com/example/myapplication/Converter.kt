@@ -42,10 +42,10 @@ class Converter : AppCompatActivity() {
                 val context = applicationContext
                 Toast.makeText(context, "Please enter in a valid amount", Toast.LENGTH_SHORT).show()
             } else {
-                val fromCountryCode = fromSpinner.text.toString().trim()
-                val toCountryCode = toSpinner.text.toString().trim()
+                val fromCountry = fromSpinner.text.toString().trim()
+                val toCountry = toSpinner.text.toString().trim()
                 convertCurrency(
-                    apiKey, reverseCountriesMap[fromCountryCode]?: "", reverseCountriesMap[toCountryCode]?: "",
+                    apiKey, reverseCountriesMap[fromCountry]?: "", reverseCountriesMap[toCountry]?: "",
                     amountEditText.text.toString().trim().toDouble())
             }
         }
