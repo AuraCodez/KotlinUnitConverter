@@ -11,6 +11,7 @@ import com.jaredrummler.materialspinner.MaterialSpinnerAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class Converter : AppCompatActivity() {
 
@@ -22,6 +23,8 @@ class Converter : AppCompatActivity() {
     private lateinit var amountEditText: EditText
     private lateinit var convertButton: Button
     private lateinit var resultEditText: EditText
+    private val enterValidAmount = "Please enter in a valid amount"
+    private val emptyString = ""
 
     private val countriesMap = HashMap<String, String>()
     private val reverseCountriesMap = HashMap<String, String>()
@@ -38,9 +41,9 @@ class Converter : AppCompatActivity() {
 
 
         convertButton.setOnClickListener {
-            if (amountEditText.text.toString() == "" || !(isNumeric(amountEditText.text.toString()))) {
+            if (amountEditText.text.toString() == emptyString || !(isNumeric(amountEditText.text.toString()))) {
                 val context = applicationContext
-                Toast.makeText(context, "Please enter in a valid amount", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, enterValidAmount, Toast.LENGTH_SHORT).show()
             } else {
                 val fromCountry = fromSpinner.text.toString().trim()
                 val toCountry = toSpinner.text.toString().trim()
@@ -53,17 +56,8 @@ class Converter : AppCompatActivity() {
     }
 
     private fun populateSpinners(symbols: List<String>, spinner: MaterialSpinner) {
-        when(spinner.id) {
-            R.id.toSpinner -> {
-                val adapter = MaterialSpinnerAdapter(spinner.context, symbols)
-                spinner.setAdapter(adapter)
-
-            }
-            R.id.fromSpinner -> {
-                val adapter = MaterialSpinnerAdapter(spinner.context, symbols)
-                spinner.setAdapter(adapter)
-            }
-        }
+        val adapter = MaterialSpinnerAdapter(spinner.context, symbols)
+        spinner.setAdapter(adapter)
     }
     private fun fetchCurrencySymbols(apiKey: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -81,6 +75,8 @@ class Converter : AppCompatActivity() {
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
+            } catch(e: IOException) {
+                e.printStackTrace()
             }
 
         }
@@ -96,6 +92,8 @@ class Converter : AppCompatActivity() {
                     }
                 }
             } catch(e: Exception) {
+                e.printStackTrace()
+            } catch(e: IOException) {
                 e.printStackTrace()
             }
         }
