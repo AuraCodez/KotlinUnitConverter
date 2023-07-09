@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class Converter : AppCompatActivity() {
-
     private val apiExchangeRates: ApiService = RetrofitClient.apiExchangeRates
     private val apiCurrencyConverter: ApiService = RetrofitClient.apiNinjasConvert
 
@@ -23,11 +22,14 @@ class Converter : AppCompatActivity() {
     private lateinit var amountEditText: EditText
     private lateinit var convertButton: Button
     private lateinit var resultEditText: EditText
+
+    private lateinit var apiKey: String
     private val enterValidAmount = "Please enter in a valid amount"
     private val emptyString = ""
 
     private val countriesMap = HashMap<String, String>()
     private val reverseCountriesMap = HashMap<String, String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.currency_page)
@@ -37,9 +39,20 @@ class Converter : AppCompatActivity() {
         amountEditText = findViewById(R.id.enterCurrency)
         convertButton = findViewById(R.id.convertButton)
         resultEditText = findViewById(R.id.convertedAmount)
-        val apiKey = intent.getStringExtra("API_KEY") ?: ""
 
+        apiKey = intent.getStringExtra("API_KEY") ?: ""
 
+        convertButtonIsClicked()
+
+        fetchCurrencySymbols(apiKey)
+    }
+
+    private fun populateSpinners(symbols: List<String>, spinner: MaterialSpinner) {
+        val adapter = MaterialSpinnerAdapter(spinner.context, symbols)
+        spinner.setAdapter(adapter)
+    }
+
+    private fun convertButtonIsClicked() {
         convertButton.setOnClickListener {
             if (amountEditText.text.toString() == emptyString || !(isNumeric(amountEditText.text.toString()))) {
                 val context = applicationContext
@@ -48,17 +61,12 @@ class Converter : AppCompatActivity() {
                 val fromCountry = fromSpinner.text.toString().trim()
                 val toCountry = toSpinner.text.toString().trim()
                 convertCurrency(
-                    apiKey, reverseCountriesMap[fromCountry]?: "", reverseCountriesMap[toCountry]?: "",
+                    apiKey, reverseCountriesMap[fromCountry]?: emptyString, reverseCountriesMap[toCountry]?: emptyString,
                     amountEditText.text.toString().trim().toDouble())
             }
         }
-        fetchCurrencySymbols(apiKey)
     }
 
-    private fun populateSpinners(symbols: List<String>, spinner: MaterialSpinner) {
-        val adapter = MaterialSpinnerAdapter(spinner.context, symbols)
-        spinner.setAdapter(adapter)
-    }
     private fun fetchCurrencySymbols(apiKey: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -75,10 +83,7 @@ class Converter : AppCompatActivity() {
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
-            } catch(e: IOException) {
-                e.printStackTrace()
             }
-
         }
     }
 
@@ -93,8 +98,6 @@ class Converter : AppCompatActivity() {
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
-            } catch(e: IOException) {
-                e.printStackTrace()
             }
         }
 
@@ -107,6 +110,5 @@ class Converter : AppCompatActivity() {
     private fun reverseMap(countriesMap: HashMap<String, String>): HashMap<String, String> {
         return countriesMap.entries.associate { (k, v) -> v to k }.toMutableMap() as HashMap<String, String>
     }
-
 
 }
