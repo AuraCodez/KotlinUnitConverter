@@ -19,7 +19,10 @@ interface ApiService {
         @Query("access_key") access_key: String,
     ) : Response<SymbolResponse>
 
+}
 
+enum class Api {
+    API_KEY
 
 }
 

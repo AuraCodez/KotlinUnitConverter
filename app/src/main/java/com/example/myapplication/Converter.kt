@@ -1,7 +1,6 @@
 package com.example.myapplication
 import RetrofitClient
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -11,7 +10,6 @@ import com.jaredrummler.materialspinner.MaterialSpinnerAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class Converter : AppCompatActivity() {
     private val apiExchangeRates: ApiService = RetrofitClient.apiExchangeRates
@@ -24,8 +22,6 @@ class Converter : AppCompatActivity() {
     private lateinit var resultEditText: EditText
 
     private lateinit var apiKey: String
-    private val enterValidAmount = "Please enter in a valid amount"
-    private val emptyString = ""
 
     private val countriesMap = HashMap<String, String>()
     private val reverseCountriesMap = HashMap<String, String>()
@@ -40,7 +36,7 @@ class Converter : AppCompatActivity() {
         convertButton = findViewById(R.id.convertButton)
         resultEditText = findViewById(R.id.convertedAmount)
 
-        apiKey = intent.getStringExtra("API_KEY") ?: ""
+        apiKey = intent.getStringExtra(Api.API_KEY.toString()) ?: ""
 
         convertButtonIsClicked()
 
@@ -54,14 +50,15 @@ class Converter : AppCompatActivity() {
 
     private fun convertButtonIsClicked() {
         convertButton.setOnClickListener {
-            if (amountEditText.text.toString() == emptyString || !(isNumeric(amountEditText.text.toString()))) {
+            if (amountEditText.text.toString() == ErrorMessage.EMPTY_STRING.message || !(ConverterUtils.isNumeric(amountEditText.text.toString()))) {
                 val context = applicationContext
-                Toast.makeText(context, enterValidAmount, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, ValidAmount.INVALID_AMOUNT.message, Toast.LENGTH_SHORT).show()
             } else {
                 val fromCountry = fromSpinner.text.toString().trim()
                 val toCountry = toSpinner.text.toString().trim()
                 convertCurrency(
-                    apiKey, reverseCountriesMap[fromCountry]?: emptyString, reverseCountriesMap[toCountry]?: emptyString,
+                    apiKey, reverseCountriesMap[fromCountry]?: ErrorMessage.EMPTY_STRING.toString(),
+                    reverseCountriesMap[toCountry]?: ErrorMessage.EMPTY_STRING.toString(),
                     amountEditText.text.toString().trim().toDouble())
             }
         }
@@ -76,7 +73,7 @@ class Converter : AppCompatActivity() {
                         countriesMap.putAll(data.symbols) // We get the HashMap from data.symbols and transfer all the data into the new HashMap
                         val worldCurrencies = data.symbols.values.toList()
                         val sortedWorldNames = worldCurrencies.sortedWith(compareBy {it})
-                        reverseCountriesMap.putAll(reverseMap(countriesMap))
+                        reverseCountriesMap.putAll(ConverterUtils.reverseMap(countriesMap))
                         populateSpinners(sortedWorldNames, toSpinner)
                         populateSpinners(sortedWorldNames, fromSpinner)
                     }
@@ -103,12 +100,5 @@ class Converter : AppCompatActivity() {
 
     }
 
-    private fun isNumeric(input: String): Boolean {
-        return input.toDoubleOrNull() != null
-    }
-
-    private fun reverseMap(countriesMap: HashMap<String, String>): HashMap<String, String> {
-        return countriesMap.entries.associate { (k, v) -> v to k }.toMutableMap() as HashMap<String, String>
-    }
 
 }
